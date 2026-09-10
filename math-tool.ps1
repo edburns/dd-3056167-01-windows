@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateRange(0, [int]::MaxValue)]
+    [ValidateRange(0, 10000)]
     [int] $N = 0
 )
 
@@ -11,7 +11,7 @@ Set-StrictMode -Version Latest
 Returns the zero-indexed Fibonacci value for a non-negative integer.
 
 .PARAMETER N
-The non-negative Fibonacci index.
+The Fibonacci index from 0 through 10000.
 
 .OUTPUTS
 System.Numerics.BigInteger
@@ -19,7 +19,7 @@ System.Numerics.BigInteger
 function Get-Fibonacci {
     [CmdletBinding()]
     param(
-        [ValidateRange(0, [int]::MaxValue)]
+        [ValidateRange(0, 10000)]
         [int] $N
     )
 
@@ -36,7 +36,7 @@ function Get-Fibonacci {
 }
 
 # Dot-sourced unit tests import the function without exercising CLI output.
-$dotSourced = $MyInvocation.InvocationName -eq '.' -or $MyInvocation.Line -match '(^|[;\r\n])\s*\.\s+'
+$dotSourced = $MyInvocation.InvocationName -eq '.'
 if (-not $dotSourced) {
     $value = Get-Fibonacci -N $N
     "Fibonacci($N) = $value"
