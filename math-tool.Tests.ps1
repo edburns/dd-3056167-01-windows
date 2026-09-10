@@ -53,10 +53,10 @@ Describe 'math-tool.ps1 CLI' {
     BeforeAll {
         $currentProcessPath = [System.Diagnostics.Process]::GetCurrentProcess().MainModule.FileName
         if ((Split-Path -Leaf $currentProcessPath) -in @('pwsh', 'pwsh.exe')) {
-            $PowerShellPath = $currentProcessPath
+            $script:PowerShellPath = $currentProcessPath
         }
         else {
-            $PowerShellPath = (Get-Command pwsh -ErrorAction Stop).Source
+            $script:PowerShellPath = (Get-Command pwsh -ErrorAction Stop).Source
         }
     }
 
@@ -65,7 +65,7 @@ Describe 'math-tool.ps1 CLI' {
         @{ N = 1; Expected = 'Fibonacci(1) = 1' }
         @{ N = 7; Expected = 'Fibonacci(7) = 13' }
     ) {
-        [string[]] $stdout = & $PowerShellPath -NoLogo -NoProfile -File $script:MathToolPath -N $N
+        [string[]] $stdout = & $script:PowerShellPath -NoLogo -NoProfile -File $script:MathToolPath -N $N
         $exitCode = $LASTEXITCODE
 
         $exitCode | Should -Be 0
