@@ -99,6 +99,15 @@ Describe 'math-tool.ps1 CLI' {
         $stdout[0] | Should -BeExactly $Expected
     }
 
+    It 'preserves positional binding for N' {
+        [string[]] $stdout = & $script:PowerShellPath -NoLogo -NoProfile -File $script:MathToolPath 7
+        $exitCode = $LASTEXITCODE
+
+        $exitCode | Should -Be 0
+        $stdout | Should -HaveCount 1
+        $stdout[0] | Should -BeExactly 'Fibonacci(7) = 13'
+    }
+
     It 'writes exactly one formatted result line for -Operation <Operation> -N <N>' -ForEach @(
         @{ Operation = 'fibonacci'; N = 0; Expected = 'Fibonacci(0) = 0' }
         @{ Operation = 'fibonacci'; N = 1; Expected = 'Fibonacci(1) = 1' }

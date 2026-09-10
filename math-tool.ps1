@@ -1,10 +1,10 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('fibonacci', 'factorial')]
-    [string] $Operation = 'fibonacci',
-
     [ValidateScript({ $_ -ge 0 }, ErrorMessage = 'N must be a non-negative integer.')]
-    [int] $N = 0
+    [int] $N = 0,
+
+    [ValidateSet('fibonacci', 'factorial')]
+    [string] $Operation = 'fibonacci'
 )
 
 Set-StrictMode -Version Latest
