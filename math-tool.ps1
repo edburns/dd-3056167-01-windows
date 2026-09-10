@@ -1,7 +1,10 @@
 [CmdletBinding()]
 param(
     [ValidateScript({ $_ -ge 0 }, ErrorMessage = 'N must be a non-negative integer.')]
-    [int] $N = 0
+    [int] $N = 0,
+
+    [ValidateSet('fibonacci', 'factorial')]
+    [string] $Operation = 'fibonacci'
 )
 
 Set-StrictMode -Version Latest
@@ -35,9 +38,46 @@ function Get-Fibonacci {
     $previous
 }
 
+<#
+.SYNOPSIS
+Returns the factorial value for a non-negative integer.
+
+.PARAMETER N
+The non-negative factorial input.
+
+.OUTPUTS
+System.Numerics.BigInteger
+#>
+function Get-Factorial {
+    [CmdletBinding()]
+    param(
+        [ValidateScript({ $_ -ge 0 }, ErrorMessage = 'N must be a non-negative integer.')]
+        [int] $N
+    )
+
+    [bigint] $product = 1
+
+    for ($i = 2; $i -le $N; $i++) {
+        $product = $product * $i
+    }
+
+    $product
+}
+
 # PowerShell sets InvocationName to '.' when dot-sourcing; other invocations exercise CLI output.
 $dotSourced = $MyInvocation.InvocationName -eq '.'
 if (-not $dotSourced) {
-    $value = Get-Fibonacci -N $N
-    "Fibonacci($N) = $value"
+    switch ($Operation) {
+        'fibonacci' {
+            $value = Get-Fibonacci -N $N
+            "Fibonacci($N) = $value"
+        }
+        'factorial' {
+            $value = Get-Factorial -N $N
+            "Factorial($N) = $value"
+        }
+        default {
+            throw "Unsupported operation '$Operation'."
+        }
+    }
 }
