@@ -17,7 +17,7 @@ Describe 'Get-Fibonacci' {
         $output = @(& { Get-Fibonacci -N $N })
 
         $output | Should -HaveCount 1
-        $output[0] | Should -BeOfType [long]
+        $output[0] | Should -BeOfType [System.Numerics.BigInteger]
         $output[0] | Should -Be $Expected
     }
 }

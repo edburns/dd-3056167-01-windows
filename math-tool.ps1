@@ -13,11 +13,11 @@ function Get-Fibonacci {
         [int] $N
     )
 
-    [long] $previous = 0
-    [long] $current = 1
+    [bigint] $previous = 0
+    [bigint] $current = 1
 
     for ($i = 0; $i -lt $N; $i++) {
-        [long] $next = $previous + $current
+        [bigint] $next = $previous + $current
         $previous = $current
         $current = $next
     }
@@ -25,6 +25,7 @@ function Get-Fibonacci {
     $previous
 }
 
+# Dot-sourced unit tests import the function without exercising CLI output.
 if ($MyInvocation.InvocationName -ne '.') {
     $value = Get-Fibonacci -N $N
     "Fibonacci($N) = $value"
