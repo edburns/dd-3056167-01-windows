@@ -1,7 +1,6 @@
 [CmdletBinding()]
 param(
-    # Keep bigint Fibonacci calculation bounded while preserving the required small integer behavior.
-    [ValidateRange(0, 10000)]
+    [ValidateScript({ $_ -ge 0 }, ErrorMessage = 'N must be a non-negative integer.')]
     [int] $N = 0
 )
 
@@ -12,7 +11,7 @@ Set-StrictMode -Version Latest
 Returns the zero-indexed Fibonacci value for a non-negative integer.
 
 .PARAMETER N
-The Fibonacci index within the script's validated range.
+The non-negative Fibonacci index.
 
 .OUTPUTS
 System.Numerics.BigInteger
@@ -20,8 +19,7 @@ System.Numerics.BigInteger
 function Get-Fibonacci {
     [CmdletBinding()]
     param(
-        # Match the script parameter range so the function and CLI reject the same inputs.
-        [ValidateRange(0, 10000)]
+        [ValidateScript({ $_ -ge 0 }, ErrorMessage = 'N must be a non-negative integer.')]
         [int] $N
     )
 

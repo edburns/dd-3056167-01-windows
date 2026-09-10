@@ -36,10 +36,6 @@ Describe 'Get-Fibonacci' {
         { Get-Fibonacci -N -1 } | Should -Throw
     }
 
-    It 'rejects input above the practical limit' {
-        { Get-Fibonacci -N 10001 } | Should -Throw
-    }
-
     It 'returns a bigint value beyond Int64 range' {
         $output = @(& { Get-Fibonacci -N 100 })
 
