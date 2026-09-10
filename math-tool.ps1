@@ -1,12 +1,10 @@
 [CmdletBinding()]
 param(
-    [ValidateRange(0, [int]::MaxValue)]
+    [ValidateRange(0, 10000)]
     [int] $N = 0
 )
 
 Set-StrictMode -Version Latest
-
-$script:MaximumFibonacciIndex = 10000
 
 <#
 .SYNOPSIS
@@ -21,7 +19,7 @@ System.Numerics.BigInteger
 function Get-Fibonacci {
     [CmdletBinding()]
     param(
-        [ValidateScript({ $_ -ge 0 -and $_ -le $script:MaximumFibonacciIndex })]
+        [ValidateRange(0, 10000)]
         [int] $N
     )
 
