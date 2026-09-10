@@ -9,6 +9,12 @@ Describe 'Get-Fibonacci' {
         . $MathToolPath
     }
 
+    It 'does not write CLI output when dot-sourced' {
+        $output = @(& { . $MathToolPath })
+
+        $output | Should -HaveCount 0
+    }
+
     It 'returns the numeric Fibonacci value for N=<N>' -ForEach @(
         @{ N = 0; Expected = 0L }
         @{ N = 1; Expected = 1L }
@@ -25,6 +31,7 @@ Describe 'Get-Fibonacci' {
 Describe 'math-tool.ps1 CLI' {
     BeforeAll {
         $MathToolPath = Join-Path $PSScriptRoot 'math-tool.ps1'
+        $PowerShellPath = (Get-Process -Id $PID).Path
     }
 
     It 'writes exactly one formatted result line for N=<N>' -ForEach @(
@@ -32,7 +39,7 @@ Describe 'math-tool.ps1 CLI' {
         @{ N = 1; Expected = 'Fibonacci(1) = 1' }
         @{ N = 7; Expected = 'Fibonacci(7) = 13' }
     ) {
-        [string[]] $stdout = & pwsh -NoLogo -NoProfile -File $MathToolPath -N $N
+        [string[]] $stdout = & $PowerShellPath -NoLogo -NoProfile -File $MathToolPath -N $N
         $exitCode = $LASTEXITCODE
 
         $exitCode | Should -Be 0
