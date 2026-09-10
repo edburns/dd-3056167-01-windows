@@ -1,5 +1,6 @@
 [CmdletBinding()]
 param(
+    # Keep bigint Fibonacci calculation bounded while preserving the required small integer behavior.
     [ValidateRange(0, 10000)]
     [int] $N = 0
 )
@@ -19,6 +20,7 @@ System.Numerics.BigInteger
 function Get-Fibonacci {
     [CmdletBinding()]
     param(
+        # Match the script parameter range so the function and CLI reject the same inputs.
         [ValidateRange(0, 10000)]
         [int] $N
     )
