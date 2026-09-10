@@ -68,13 +68,16 @@ function Get-Factorial {
 $dotSourced = $MyInvocation.InvocationName -eq '.'
 if (-not $dotSourced) {
     switch ($Operation) {
+        'fibonacci' {
+            $value = Get-Fibonacci -N $N
+            "Fibonacci($N) = $value"
+        }
         'factorial' {
             $value = Get-Factorial -N $N
             "Factorial($N) = $value"
         }
         default {
-            $value = Get-Fibonacci -N $N
-            "Fibonacci($N) = $value"
+            throw "Unsupported operation '$Operation'."
         }
     }
 }
