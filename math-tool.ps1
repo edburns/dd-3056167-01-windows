@@ -6,6 +6,16 @@ param(
 
 Set-StrictMode -Version Latest
 
+<#
+.SYNOPSIS
+Returns the zero-indexed Fibonacci value for a non-negative integer.
+
+.PARAMETER N
+The non-negative Fibonacci index.
+
+.OUTPUTS
+System.Numerics.BigInteger
+#>
 function Get-Fibonacci {
     [CmdletBinding()]
     param(
@@ -26,7 +36,8 @@ function Get-Fibonacci {
 }
 
 # Dot-sourced unit tests import the function without exercising CLI output.
-if ($MyInvocation.InvocationName -ne '.') {
+$dotSourced = $MyInvocation.InvocationName -eq '.' -or $MyInvocation.Line -match '(^|[;\r\n])\s*\.\s+'
+if (-not $dotSourced) {
     $value = Get-Fibonacci -N $N
     "Fibonacci($N) = $value"
 }

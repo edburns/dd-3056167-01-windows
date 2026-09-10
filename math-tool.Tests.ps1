@@ -3,16 +3,22 @@ param()
 
 Set-StrictMode -Version Latest
 
-Describe 'Get-Fibonacci' {
+Describe 'math-tool.ps1 import behavior' {
     BeforeAll {
         $MathToolPath = Join-Path $PSScriptRoot 'math-tool.ps1'
-        . $MathToolPath
     }
 
     It 'does not write CLI output when dot-sourced' {
         $output = @(& { . $MathToolPath })
 
         $output | Should -HaveCount 0
+    }
+}
+
+Describe 'Get-Fibonacci' {
+    BeforeAll {
+        $MathToolPath = Join-Path $PSScriptRoot 'math-tool.ps1'
+        . $MathToolPath
     }
 
     It 'returns the numeric Fibonacci value for N=<N>' -ForEach @(
@@ -26,12 +32,30 @@ Describe 'Get-Fibonacci' {
         $output[0] | Should -BeOfType [System.Numerics.BigInteger]
         $output[0] | Should -Be $Expected
     }
+
+    It 'rejects negative input' {
+        { Get-Fibonacci -N -1 } | Should -Throw
+    }
+
+    It 'returns a bigint value beyond Int64 range' {
+        $output = @(& { Get-Fibonacci -N 100 })
+
+        $output | Should -HaveCount 1
+        $output[0] | Should -BeOfType [System.Numerics.BigInteger]
+        $output[0] | Should -Be ([System.Numerics.BigInteger]::Parse('354224848179261915075'))
+    }
 }
 
 Describe 'math-tool.ps1 CLI' {
     BeforeAll {
         $MathToolPath = Join-Path $PSScriptRoot 'math-tool.ps1'
-        $PowerShellPath = (Get-Process -Id $PID).Path
+        $currentProcessPath = [System.Diagnostics.Process]::GetCurrentProcess().MainModule.FileName
+        if ((Split-Path -Leaf $currentProcessPath) -in @('pwsh', 'pwsh.exe')) {
+            $PowerShellPath = $currentProcessPath
+        }
+        else {
+            $PowerShellPath = (Get-Command pwsh -ErrorAction Stop).Source
+        }
     }
 
     It 'writes exactly one formatted result line for N=<N>' -ForEach @(
